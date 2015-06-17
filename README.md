@@ -36,6 +36,7 @@ $manager->add_listener( new Listener( 'first_name', function( WP_User $recipient
 ## Supports
 Strategies
  - WP_Mail
+ - iThemes Exchange
  
 Queues
  - WP_Cron
