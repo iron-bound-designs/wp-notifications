@@ -202,8 +202,19 @@ class Notification implements \Serializable {
 	 *
 	 * @codeCoverageIgnore
 	 */
-	public function serialize() {
-		$data = array(
+	final public function serialize() {
+		return serialize( $this->get_data_to_serialize() );
+	}
+
+	/**
+	 * Get the data to serialize.
+	 *
+	 * @since 1.0
+	 *
+	 * @return array
+	 */
+	protected function get_data_to_serialize() {
+		return array(
 			'recipient'    => $this->recipient->ID,
 			'message'      => $this->message,
 			'subject'      => $this->subject,
@@ -211,8 +222,6 @@ class Notification implements \Serializable {
 			'manager'      => $this->manager->get_type(),
 			'data_sources' => serialize( $this->data_sources )
 		);
-
-		return serialize( $data );
 	}
 
 	/**
@@ -228,10 +237,22 @@ class Notification implements \Serializable {
 	 *
 	 * @codeCoverageIgnore
 	 */
-	public function unserialize( $serialized ) {
+	final public function unserialize( $serialized ) {
 		$data = unserialize( $serialized );
 
-		$this->recipient    = get_user_by( 'id', $serialized['recipient'] );
+		$this->do_unserialize( $data );
+	}
+
+	/**
+	 * Do the unserialization.
+	 *
+	 * @since 1.0
+	 *
+	 * @param array $data
+	 */
+	protected function do_unserialize( array $data ) {
+
+		$this->recipient    = get_user_by( 'id', $data['recipient'] );
 		$this->message      = $data['message'];
 		$this->manager      = Factory::make( $data['manager'] );
 		$this->tags         = $this->generate_rendered_tags();
