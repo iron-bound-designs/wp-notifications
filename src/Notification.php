@@ -103,9 +103,13 @@ class Notification implements \Serializable {
 	 * @since 1.0
 	 *
 	 * @param \Serializable $source
+	 *
+	 * @return self
 	 */
 	public function add_data_source( \Serializable $source ) {
 		$this->data_sources[] = $source;
+
+		return $this;
 	}
 
 	/**
@@ -114,9 +118,13 @@ class Notification implements \Serializable {
 	 * @since 1.0
 	 *
 	 * @param Strategy $strategy
+	 *
+	 * @return self
 	 */
 	public function set_strategy( Strategy $strategy ) {
 		$this->strategy = $strategy;
+
+		return $this;
 	}
 
 	/**
