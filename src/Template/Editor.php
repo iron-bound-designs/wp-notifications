@@ -25,18 +25,25 @@ class Editor {
 	private static $count = 0;
 
 	/**
+	 * @var array
+	 */
+	private $translations = array();
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.0
 	 *
 	 * @param Manager $manager
+	 * @param array   $translations
 	 */
-	public function __construct( Manager $manager ) {
+	public function __construct( Manager $manager, array $translations ) {
 		remove_action( 'media_buttons', 'media_buttons' );
 		add_action( 'media_buttons', array( __CLASS__, 'display_shortcode_button' ), 15 );
 		add_filter( 'mce_buttons', array( __CLASS__, 'modify_mce_buttons' ) );
 
-		$this->manager = $manager;
+		$this->manager      = $manager;
+		$this->translations = $translations;
 		self::$count += 1;
 	}
 
@@ -52,10 +59,10 @@ class Editor {
 
 			jQuery(document).ready(function ($) {
 
-				$(document).on('click', '#itelic-template-tags-<?php echo self::$count; ?>', function (e) {
-					var tag = jQuery("#add-tag-value-<?php echo self::$count; ?>").val();
+				$(document).on('click', '#ibd-wp-notifications-template-tags-<?php echo self::$count; ?>', function (e) {
+					var tag = jQuery("#ibd-wp-notifications-add-tag-value-<?php echo self::$count; ?>").val();
 					if (tag.length == 0 || tag == -1) {
-						alert("<?php _e("You must select an item."); ?>");
+						alert("<?php echo esc_js($this->translations['mustSelectItem']); ?>");
 						return;
 					}
 					window.send_to_editor(tag);
@@ -64,15 +71,15 @@ class Editor {
 			});
 		</script>
 
-		<div id="itelic-select-tag-<?php echo self::$count; ?>" style="display: none">
+		<div id="ibd-wp-notifications-select-tag-<?php echo self::$count; ?>" style="display: none">
 			<div class="wrap">
 				<div>
-					<p><?php _e( "Select a template tag to insert" ); ?></p>
+					<p><?php echo $this->translations['selectTemplateTag']; ?></p>
 
-					<label for="add-tag-value-<?php echo self::$count; ?>"><?php _e( "Template Tag" ); ?></label><br>
+					<label for="ibd-wp-notifications-add-tag-value-<?php echo self::$count; ?>"><?php echo $this->translations['templateTag']; ?></label><br>
 
-					<select id="add-tag-value-<?php echo self::$count; ?>">
-						<option value="-1"><?php _e( "Select a tag..." ); ?></option>
+					<select id="ibd-wp-notifications-add-tag-value-<?php echo self::$count; ?>">
+						<option value="-1"><?php echo $this->translations['selectATag']; ?></option>
 
 						<?php foreach ( $this->manager->get_listeners() as $listener ): ?>
 							<option value="<?php echo esc_attr( "{" . $listener->get_tag() . "}" ); ?>">
@@ -83,10 +90,10 @@ class Editor {
 				</div>
 
 				<div style="padding: 15px 15px 15px 0">
-					<input type="button" class="button-primary" id="itelic-template-tags-<?php echo self::$count; ?>" value="<?php _e( 'Insert Tag' ); ?>" />
+					<input type="button" class="button-primary" id="ibd-wp-notifications-template-tags-<?php echo self::$count; ?>" value="<?php echo esc_attr( $this->translations['insertTag'] ); ?>" />
 					&nbsp;&nbsp;&nbsp;
 					<a class="button" style="color:#bbb;" href="#" onclick="tb_remove(); return false;">
-						<?php _e( 'Cancel' ); ?>
+						<?php echo $this->translations['cancel']; ?>
 					</a>
 				</div>
 			</div>
@@ -102,9 +109,12 @@ class Editor {
 	 */
 	public static function display_shortcode_button() {
 		add_thickbox();
-		$id = 'itelic-select-tag-' . self::$count;
+		$id    = 'ibd-wp-notifications-select-tag-' . self::$count;
+		$class = 'thickbox button ibd-wp-notifications-tags';
+		$title = __( "Insert Template Tag" ); // todo figure out how to do this better
 
-		echo '<a href="#TB_inline?width=150height=250&inlineId=' . $id . '" class="thickbox button itelic_tags" id="itelic_add_tag" title="' . __( 'Insert Template Tag' ) . '"> ' . __( 'Insert Template Tag' ) . '</a>';
+
+		echo '<a href="#TB_inline?width=150height=250&inlineId=' . $id . '" class="' . $class . '" title="' . $title . '"> ' . $title . '</a>';
 	}
 
 	/**
