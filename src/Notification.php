@@ -84,14 +84,6 @@ class Notification implements \Serializable {
 		$data_sources   = $this->data_sources;
 		$data_sources[] = $this->recipient;
 
-		/**
-		 * Filter the data sources used for rendering the template tags.
-		 *
-		 * @param array    $data_sources
-		 * @param \WP_User $recipient
-		 */
-		$data_sources = apply_filters( 'itepbo_notification_data_sources', $data_sources, $this->recipient );
-
 		$tags     = $this->manager->render_tags( $data_sources );
 		$rendered = array();
 

@@ -33,7 +33,7 @@ class Factory {
 		 *
 		 * @param Manager $manager
 		 */
-		do_action( "itelic_notifications_template_manager_$type", $manager );
+		do_action( "ibd_wp_notifications_template_manager_$type", $manager );
 
 		return $manager;
 	}
