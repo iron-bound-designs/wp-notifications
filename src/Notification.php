@@ -214,13 +214,25 @@ class Notification implements \Serializable {
 	 * @return array
 	 */
 	protected function get_data_to_serialize() {
+
+		$data_sources = $this->data_sources;
+
+		// remove the WP User from the data sources array before serialization
+		foreach ( $data_sources as $key => $val ) {
+			if ( $val instanceof \WP_User ) {
+				unset( $data_sources[ $key ] );
+
+				break;
+			}
+		}
+
 		return array(
 			'recipient'    => $this->recipient->ID,
 			'message'      => $this->message,
 			'subject'      => $this->subject,
 			'strategy'     => serialize( $this->strategy ),
 			'manager'      => $this->manager->get_type(),
-			'data_sources' => serialize( $this->data_sources )
+			'data_sources' => serialize( $data_sources )
 		);
 	}
 
@@ -239,7 +251,6 @@ class Notification implements \Serializable {
 	 */
 	final public function unserialize( $serialized ) {
 		$data = unserialize( $serialized );
-
 		$this->do_unserialize( $data );
 	}
 
@@ -251,12 +262,13 @@ class Notification implements \Serializable {
 	 * @param array $data
 	 */
 	protected function do_unserialize( array $data ) {
+		$this->recipient = get_user_by( 'id', $data['recipient'] );
+		$this->message   = $data['message'];
+		$this->manager   = Factory::make( $data['manager'] );
+		$this->tags      = $this->generate_rendered_tags();
+		$this->strategy  = unserialize( $data['strategy'] );
 
-		$this->recipient    = get_user_by( 'id', $data['recipient'] );
-		$this->message      = $data['message'];
-		$this->manager      = Factory::make( $data['manager'] );
-		$this->tags         = $this->generate_rendered_tags();
-		$this->data_sources = unserialize( $data['data_sources'] );
-		$this->strategy     = unserialize( $data['strategy'] );
+		$this->data_sources   = unserialize( $data['data_sources'] );
+		$this->data_sources[] = $this->recipient;
 	}
 }
