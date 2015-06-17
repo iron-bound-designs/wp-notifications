@@ -15,7 +15,7 @@ namespace IronBound\WP_Notifications\Strategy;
  * Interface Base
  * @package IronBound\WP_Notifications\Strategy
  */
-interface Strategy {
+interface Strategy extends \Serializable {
 
 	/**
 	 * Send the notification.

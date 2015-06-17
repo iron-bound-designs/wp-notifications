@@ -2,8 +2,8 @@
 /**
  * Used to send purchase notification.
  *
- * @author Iron Bound Designs
- * @since  1.0
+ * @author      Iron Bound Designs
+ * @since       1.0
  *
  * @copyright   Copyright (c) 2015, Iron Bound Designs, Inc.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License v2 or later
@@ -24,7 +24,7 @@ class Notification implements \Serializable {
 	/**
 	 * @var Strategy
 	 */
-	protected $strategy;
+	private $strategy;
 
 	/**
 	 * @var \WP_User
@@ -82,7 +82,7 @@ class Notification implements \Serializable {
 	 *
 	 * @return array
 	 */
-	protected function generate_rendered_tags() {
+	final protected function generate_rendered_tags() {
 
 		$data_sources   = $this->data_sources;
 		$data_sources[] = $this->recipient;
@@ -134,7 +134,7 @@ class Notification implements \Serializable {
 			throw new \LogicException( "No strategy has been set." );
 		}
 
-		return $this->strategy->send( $this->recipient, $this->message, $this->subject, $this->tags );
+		return $this->strategy->send( $this->get_recipient(), $this->get_message(), $this->get_subject(), $this->get_tags() );
 	}
 
 	/**
@@ -157,8 +157,41 @@ class Notification implements \Serializable {
 	 *
 	 * @return \WP_User
 	 */
-	public function get_recipient() {
+	final public function get_recipient() {
 		return $this->recipient;
+	}
+
+	/**
+	 * Get the message.
+	 *
+	 * @since 1.0
+	 *
+	 * @return string
+	 */
+	final public function get_message() {
+		return $this->message;
+	}
+
+	/**
+	 * Get the subject.
+	 *
+	 * @since 1.0
+	 *
+	 * @return string
+	 */
+	final public function get_subject() {
+		return $this->subject;
+	}
+
+	/**
+	 * Get the tags to be replaced.
+	 *
+	 * @since 1.0
+	 *
+	 * @return array
+	 */
+	final protected function get_tags() {
+		return $this->tags;
 	}
 
 	/**
@@ -174,7 +207,7 @@ class Notification implements \Serializable {
 			'recipient'    => $this->recipient->ID,
 			'message'      => $this->message,
 			'subject'      => $this->subject,
-			'strategy'     => get_class( $this->strategy ),
+			'strategy'     => serialize( $this->strategy ),
 			'manager'      => $this->manager->get_type(),
 			'data_sources' => serialize( $this->data_sources )
 		);
@@ -203,11 +236,6 @@ class Notification implements \Serializable {
 		$this->manager      = Factory::make( $data['manager'] );
 		$this->tags         = $this->generate_rendered_tags();
 		$this->data_sources = unserialize( $data['data_sources'] );
-
-		$strategy_class = $data['strategy'];
-
-		if ( $strategy_class && $strategy_class instanceof Strategy ) {
-			$this->strategy = new $strategy_class();
-		}
+		$this->strategy     = unserialize( $data['strategy'] );
 	}
 }

@@ -2,8 +2,8 @@
 /**
  * Send notifications using WP Mail.
  *
- * @author Iron Bound Designs
- * @since  1.0
+ * @author      Iron Bound Designs
+ * @since       1.0
  *
  * @copyright   Copyright (c) 2015, Iron Bound Designs, Inc.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License v2 or later
@@ -53,5 +53,30 @@ class WP_Mail implements Strategy {
 	 */
 	public function get_suggested_rate() {
 		return 10;
+	}
+
+	/**
+	 * (PHP 5 &gt;= 5.1.0)<br/>
+	 * String representation of object
+	 * @link http://php.net/manual/en/serializable.serialize.php
+	 * @return string the string representation of the object or null
+	 */
+	public function serialize() {
+		return serialize( array() ); // we don't have any data to save
+	}
+
+	/**
+	 * (PHP 5 &gt;= 5.1.0)<br/>
+	 * Constructs the object
+	 * @link http://php.net/manual/en/serializable.unserialize.php
+	 *
+	 * @param string $serialized <p>
+	 *                           The string representation of the object.
+	 *                           </p>
+	 *
+	 * @return void
+	 */
+	public function unserialize( $serialized ) {
+		// we don't have any data to unwrap
 	}
 }
