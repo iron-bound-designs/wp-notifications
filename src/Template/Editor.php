@@ -6,12 +6,11 @@
  * @since  1.0
  */
 
-namespace ITELIC\Notifications\Template;
-use ITELIC\Plugin;
+namespace IronBound\WP_Notifications\Template;
 
 /**
  * Class Editor
- * @package ITELIC\Notifications\Template
+ * @package IronBound\WP_Notifications\Template
  */
 class Editor {
 
@@ -105,7 +104,7 @@ class Editor {
 		add_thickbox();
 		$id = 'itelic-select-tag-' . self::$count;
 
-		echo '<a href="#TB_inline?width=150height=250&inlineId=' . $id .'" class="thickbox button itelic_tags" id="itelic_add_tag" title="' . __( 'Insert Template Tag', Plugin::SLUG ) . '"> ' . __( 'Insert Template Tag', Plugin::SLUG ) . '</a>';
+		echo '<a href="#TB_inline?width=150height=250&inlineId=' . $id . '" class="thickbox button itelic_tags" id="itelic_add_tag" title="' . __( 'Insert Template Tag' ) . '"> ' . __( 'Insert Template Tag' ) . '</a>';
 	}
 
 	/**

@@ -6,11 +6,11 @@
  * @since  1.0
  */
 
-namespace ITELIC\Notifications\Queue;
+namespace IronBound\WP_Notifications\Queue;
 
 /**
  * Class Manager
- * @package ITELIC\Notifications\Queue
+ * @package IronBound\WP_Notifications\Queue
  */
 final class Manager {
 

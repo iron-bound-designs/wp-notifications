@@ -6,15 +6,15 @@
  * @since  1.0
  */
 
-namespace ITELIC\Notifications;
+namespace IronBound\WP_Notifications;
 
-use ITELIC\Notifications\Strategy\Strategy;
-use ITELIC\Notifications\Template\Factory;
-use ITELIC\Notifications\Template\Manager;
+use IronBound\WP_Notifications\Strategy\Strategy;
+use IronBound\WP_Notifications\Template\Factory;
+use IronBound\WP_Notifications\Template\Manager;
 
 /**
  * Class Notification
- * @package ITELIC\Notifications
+ * @package IronBound\WP_Notifications
  */
 class Notification implements \Serializable {
 
@@ -24,9 +24,9 @@ class Notification implements \Serializable {
 	protected $strategy;
 
 	/**
-	 * @var \IT_Exchange_Customer
+	 * @var \WP_User
 	 */
-	private $customer;
+	private $recipient;
 
 	/**
 	 * @var string
@@ -58,16 +58,16 @@ class Notification implements \Serializable {
 	 *
 	 * @since 1.0
 	 *
-	 * @param \IT_Exchange_Customer $customer
-	 * @param Manager               $manager
-	 * @param string                $message Message to be sent. Template tags are not replaced. May contain HTML.
-	 * @param string                $subject
+	 * @param \WP_User $recipient
+	 * @param Manager  $manager
+	 * @param string   $message Message to be sent. Template tags are not replaced. May contain HTML.
+	 * @param string   $subject
 	 */
-	public function __construct( \IT_Exchange_Customer $customer, Manager $manager, $message, $subject ) {
-		$this->customer = $customer;
-		$this->message  = $message;
-		$this->manager  = $manager;
-		$this->subject  = $subject;
+	public function __construct( \WP_User $recipient, Manager $manager, $message, $subject ) {
+		$this->recipient = $recipient;
+		$this->message   = $message;
+		$this->manager   = $manager;
+		$this->subject   = $subject;
 
 		$this->tags = $this->generate_rendered_tags();
 	}
@@ -82,15 +82,15 @@ class Notification implements \Serializable {
 	protected function generate_rendered_tags() {
 
 		$data_sources   = $this->data_sources;
-		$data_sources[] = $this->customer;
+		$data_sources[] = $this->recipient;
 
 		/**
 		 * Filter the data sources used for rendering the template tags.
 		 *
-		 * @param array                 $data_sources
-		 * @param \IT_Exchange_Customer $customer
+		 * @param array    $data_sources
+		 * @param \WP_User $recipient
 		 */
-		$data_sources = apply_filters( 'itepbo_notification_data_sources', $data_sources, $this->customer );
+		$data_sources = apply_filters( 'itepbo_notification_data_sources', $data_sources, $this->recipient );
 
 		$tags     = $this->manager->render_tags( $data_sources );
 		$rendered = array();
@@ -139,7 +139,7 @@ class Notification implements \Serializable {
 			throw new \LogicException( "No strategy has been set." );
 		}
 
-		return $this->strategy->send( $this->customer, $this->message, $this->subject, $this->tags );
+		return $this->strategy->send( $this->recipient, $this->message, $this->subject, $this->tags );
 	}
 
 	/**
@@ -156,14 +156,14 @@ class Notification implements \Serializable {
 	}
 
 	/**
-	 * Get the customer for this notification.
+	 * Get the recipient for this notification.
 	 *
 	 * @since 1.0
 	 *
-	 * @return \IT_Exchange_Customer
+	 * @return \WP_User
 	 */
-	public function get_customer() {
-		return $this->customer;
+	public function get_recipient() {
+		return $this->recipient;
 	}
 
 	/**
@@ -176,7 +176,7 @@ class Notification implements \Serializable {
 	 */
 	public function serialize() {
 		$data = array(
-			'customer'     => $this->customer->id,
+			'recipient'    => $this->recipient->ID,
 			'message'      => $this->message,
 			'subject'      => $this->subject,
 			'strategy'     => get_class( $this->strategy ),
@@ -203,7 +203,7 @@ class Notification implements \Serializable {
 	public function unserialize( $serialized ) {
 		$data = unserialize( $serialized );
 
-		$this->customer     = new \IT_Exchange_Customer( $serialized['customer'] );
+		$this->recipient    = get_user_by( 'id', $serialized['recipient'] );
 		$this->message      = $data['message'];
 		$this->manager      = Factory::make( $data['manager'] );
 		$this->tags         = $this->generate_rendered_tags();

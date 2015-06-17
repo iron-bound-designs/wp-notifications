@@ -6,11 +6,11 @@
  * @since  1.0
  */
 
-namespace ITELIC\Notifications\Strategy;
+namespace IronBound\WP_Notifications\Strategy;
 
 /**
  * Interface Base
- * @package ITELIC\Notifications\Strategy
+ * @package IronBound\WP_Notifications\Strategy
  */
 interface Strategy {
 
@@ -19,16 +19,16 @@ interface Strategy {
 	 *
 	 * @since 1.0
 	 *
-	 * @param \IT_Exchange_Customer $customer
-	 * @param string                $message        May contain HTML. Template parts aren't replaced.
-	 * @param string                $subject
-	 * @param array                 $template_parts Array of template parts to their values.
+	 * @param \WP_User $recipient
+	 * @param string   $message        May contain HTML. Template parts aren't replaced.
+	 * @param string   $subject
+	 * @param array    $template_parts Array of template parts to their values.
 	 *
 	 * @return bool
 	 *
 	 * @throws \Exception
 	 */
-	public function send( \IT_Exchange_Customer $customer, $message, $subject, array $template_parts );
+	public function send( \WP_User $recipient, $message, $subject, array $template_parts );
 
 	/**
 	 * Get the suggested number of times a notification with this strategy can be sent per PHP request.

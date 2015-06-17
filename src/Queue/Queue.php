@@ -6,14 +6,14 @@
  * @since  1.0
  */
 
-namespace ITELIC\Notifications\Queue;
+namespace IronBound\WP_Notifications\Queue;
 
-use ITELIC\Notifications\Notification;
-use ITELIC\Notifications\Strategy\Strategy;
+use IronBound\WP_Notifications\Notification;
+use IronBound\WP_Notifications\Strategy\Strategy;
 
 /**
  * Interface Queue
- * @package ITELIC\Notifications\Queue
+ * @package IronBound\WP_Notifications\Queue
  */
 interface Queue {
 

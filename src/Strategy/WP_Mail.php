@@ -3,14 +3,14 @@
  * Send notifications using WP Mail.
  *
  * @author Iron Bound Designs
- * @since
+ * @since  1.0
  */
 
-namespace ITELIC\Notifications\Strategy;
+namespace IronBound\WP_Notifications\Strategy;
 
 /**
  * Class WP_Mail
- * @package ITELIC\Notifications\Strategy
+ * @package IronBound\WP_Notifications\Strategy
  */
 class WP_Mail implements Strategy {
 
@@ -19,22 +19,26 @@ class WP_Mail implements Strategy {
 	 *
 	 * @since 1.0
 	 *
-	 * @param \IT_Exchange_Customer $customer
-	 * @param string                $message        May contain HTML. Template parts aren't replaced.
-	 * @param string                $subject
-	 * @param array                 $template_parts Array of template parts to their values.
+	 * @param \WP_User $recipient
+	 * @param string   $message        May contain HTML. Template parts aren't replaced.
+	 * @param string   $subject
+	 * @param array    $template_parts Array of template parts to their values.
 	 *
 	 * @return bool
 	 *
 	 * @throws \Exception
 	 */
-	public function send( \IT_Exchange_Customer $customer, $message, $subject, array $template_parts ) {
+	public function send( \WP_User $recipient, $message, $subject, array $template_parts ) {
 		$message = str_replace( array_keys( $template_parts ), array_values( $template_parts ), $message );
 		$subject = str_replace( array_keys( $template_parts ), array_values( $template_parts ), $subject );
 
-		do_action( 'it_exchange_send_email_notification', $customer->id, $subject, $message );
+		$name        = get_option( 'blogname' );
+		$admin_email = get_option( 'admin_email' );
 
-		return true;
+		return wp_mail( $recipient->user_email, $subject, $message, array(
+			'Content-Type: text/html; charset=UTF-8',
+			"From: $name <$admin_email>"
+		) );
 	}
 
 	/**
