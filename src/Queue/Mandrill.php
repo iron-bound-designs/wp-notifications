@@ -9,6 +9,7 @@
 namespace IronBound\WP_Notifications\Queue;
 
 use IronBound\WP_Notifications\Notification;
+use IronBound\WP_Notifications\Strategy\Null;
 use IronBound\WP_Notifications\Strategy\Strategy;
 
 /**
@@ -73,6 +74,10 @@ class Mandrill implements Queue {
 		$args = wp_parse_args( $args, $this->defaults );
 
 		$this->mandrill->messages->send( $args );
+
+		foreach ( $notifications as $notification ) {
+			$notification->set_strategy( new Null() )->send();
+		}
 	}
 
 	/**
