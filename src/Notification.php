@@ -201,7 +201,7 @@ class Notification implements \Serializable {
 	 *
 	 * @return array
 	 */
-	final protected function get_tags() {
+	final public function get_tags() {
 		return $this->tags;
 	}
 

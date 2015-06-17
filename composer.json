@@ -13,6 +13,9 @@
     "require": {
         "php": ">=5.3.0"	
     },
+    "suggest": {
+        "mandrill/mandrill": "Allows for sending notifications via Mandrill"
+    },
     "autoload": {
         "psr-4": {
             "IronBound\\WP_Notifications\\" : "src/"

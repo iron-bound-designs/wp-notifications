@@ -38,9 +38,11 @@ Strategies
  - WP_Mail
  - iThemes Exchange
  - Easy Digital Downloads
+ - Mandrill
  
 Queues
  - WP_Cron
+ - Mandrill
 
 ## Installation
 Via composer...
