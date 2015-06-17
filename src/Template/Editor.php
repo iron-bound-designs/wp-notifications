@@ -42,7 +42,7 @@ class Editor {
 	 */
 	public function __construct( Manager $manager, array $translations ) {
 		remove_action( 'media_buttons', 'media_buttons' );
-		add_action( 'media_buttons', array( __CLASS__, 'display_shortcode_button' ), 15 );
+		add_action( 'media_buttons', array( __CLASS__, 'display_template_tag_button' ), 15 );
 		add_filter( 'mce_buttons', array( __CLASS__, 'modify_mce_buttons' ) );
 
 		$this->manager      = $manager;
@@ -51,11 +51,13 @@ class Editor {
 	}
 
 	/**
-	 * Display the shortcode popup.
+	 * Render the thickbox.
+	 *
+	 * This outputs the HTML and JS.
 	 *
 	 * @since 1.0
 	 */
-	public function shortcode_popup() {
+	public function thickbox() {
 		?>
 
 		<script type="text/javascript">
@@ -106,11 +108,11 @@ class Editor {
 	}
 
 	/**
-	 * Display the shortcode button.
+	 * Display the template tag button button.
 	 *
 	 * @since 1.0
 	 */
-	public static function display_shortcode_button() {
+	public static function display_template_tag_button() {
 		add_thickbox();
 		$id    = 'ibd-wp-notifications-select-tag-' . self::$count;
 		$class = 'thickbox button ibd-wp-notifications-tags';
@@ -122,6 +124,8 @@ class Editor {
 
 	/**
 	 * Modify the tinyMCE buttons.
+	 *
+	 * Remove the more tag.
 	 *
 	 * @param array $buttons
 	 *
@@ -140,7 +144,7 @@ class Editor {
 	 */
 	public function __destruct() {
 		add_action( 'media_buttons', 'media_buttons' );
-		remove_action( 'media_buttons', array( __CLASS__, 'display_shortcode_button' ), 15 );
+		remove_action( 'media_buttons', array( __CLASS__, 'display_template_tag_button' ), 15 );
 		remove_filter( 'mce_buttons', array( __CLASS__, 'modify_mce_buttons' ) );
 	}
 }

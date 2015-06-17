@@ -63,8 +63,8 @@ class Notification implements \Serializable {
 	 *
 	 * @param \WP_User $recipient
 	 * @param Manager  $manager
-	 * @param string   $message Message to be sent. Template tags are not replaced. May contain HTML.
-	 * @param string   $subject
+	 * @param string   $message Message to be sent with template tags. May contain HTML.
+	 * @param string   $subject No limit is enforced, but should be short and concise. Template tags allowed.
 	 */
 	public function __construct( \WP_User $recipient, Manager $manager, $message, $subject ) {
 		$this->recipient = $recipient;
@@ -140,7 +140,8 @@ class Notification implements \Serializable {
 	/**
 	 * Has this notification already been set.
 	 *
-	 * This is used by Queue processors in case of timeouts.
+	 * This is used by Queue processors in case of timeouts. If you have someway of determining,
+	 * that a recipient was notified, you should implement this method.
 	 *
 	 * @since 1.0
 	 *
@@ -162,7 +163,9 @@ class Notification implements \Serializable {
 	}
 
 	/**
-	 * Get the message.
+	 * Get the message content.
+	 *
+	 * This may contain HTML.
 	 *
 	 * @since 1.0
 	 *
@@ -173,7 +176,7 @@ class Notification implements \Serializable {
 	}
 
 	/**
-	 * Get the subject.
+	 * Get the subject line.
 	 *
 	 * @since 1.0
 	 *
@@ -208,6 +211,10 @@ class Notification implements \Serializable {
 
 	/**
 	 * Get the data to serialize.
+	 *
+	 * Child classes should override this method, and add their own data.
+	 *
+	 * This can be exploited to override the base class's data - don't.
 	 *
 	 * @since 1.0
 	 *
@@ -255,7 +262,9 @@ class Notification implements \Serializable {
 	}
 
 	/**
-	 * Do the unserialization.
+	 * Do the actual unserialization.
+	 *
+	 * Assign the data to class properties.
 	 *
 	 * @since 1.0
 	 *

@@ -56,7 +56,7 @@ class Listener {
 	}
 
 	/**
-	 * Render the shortcode.
+	 * Render the template tag.
 	 *
 	 * @since 1.0
 	 *

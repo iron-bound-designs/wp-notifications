@@ -23,8 +23,8 @@ interface Strategy extends \Serializable {
 	 * @since 1.0
 	 *
 	 * @param \WP_User $recipient
-	 * @param string   $message        May contain HTML. Template parts aren't replaced.
-	 * @param string   $subject
+	 * @param string   $message        May contain HTML. Template parts haven't been replaced.
+	 * @param string   $subject        Template tags haven't been replaced.
 	 * @param array    $template_parts Array of template parts to their values.
 	 *
 	 * @return bool

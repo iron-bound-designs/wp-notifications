@@ -41,7 +41,7 @@ final class Manager {
 	 *
 	 * @param string $slug
 	 *
-	 * @return Queue
+	 * @return Queue|null
 	 */
 	public static function get( $slug ) {
 		return isset( self::$queues[ $slug ] ) ? self::$queues[ $slug ] : null;
