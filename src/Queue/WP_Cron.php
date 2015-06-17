@@ -17,18 +17,26 @@ use IronBound\WP_Notifications\Strategy\Strategy;
  */
 class WP_Cron implements Queue {
 
-	const CRON_ACTION = 'itelic-cron-notification';
-	const OPTION_NAME = 'itelic_notification_queues';
+	const CRON_ACTION = 'ibd-wp-notifications-cron-notification';
+
+	/**
+	 * @var string
+	 */
+	protected $bucket;
 
 	/**
 	 * Constructor.
 	 *
 	 * @since 1.0
+	 *
+	 * @param string $bucket
 	 */
-	public function __construct() {
-		if ( ! has_action( self::CRON_ACTION, array( __CLASS__, 'cron_callback' ) ) ) {
-			add_action( self::CRON_ACTION, array( __CLASS__, 'cron_callback' ) );
+	public function __construct( $bucket ) {
+		if ( ! has_action( self::CRON_ACTION, array( $this, 'cron_callback' ) ) ) {
+			add_action( self::CRON_ACTION, array( $this, 'cron_callback' ) );
 		}
+
+		$this->bucket = $bucket;
 	}
 
 	/**
@@ -45,13 +53,13 @@ class WP_Cron implements Queue {
 
 		$hash = uniqid();
 
-		$queues          = get_option( self::OPTION_NAME, array() );
+		$queues          = get_option( $this->bucket, array() );
 		$queues[ $hash ] = array(
 			'notifications' => $notifications,
 			'strategy'      => $strategy
 		);
 
-		update_option( self::OPTION_NAME, $queues );
+		update_option( $this->bucket, $queues );
 
 		self::cron_callback( $hash );
 	}
@@ -74,9 +82,9 @@ class WP_Cron implements Queue {
 	 *
 	 * @param string $hash
 	 */
-	public static function cron_callback( $hash ) {
+	public function cron_callback( $hash ) {
 
-		$queues = get_option( self::OPTION_NAME, array() );
+		$queues = get_option( $this->bucket, array() );
 
 		if ( ! isset( $queues[ $hash ] ) ) {
 			return;
@@ -137,6 +145,6 @@ class WP_Cron implements Queue {
 			wp_schedule_single_event( self::get_next_event_time(), self::CRON_ACTION, array( $hash, uniqid() ) );
 		}
 
-		update_option( self::OPTION_NAME, $queues );
+		update_option( $this->bucket, $queues );
 	}
 }
