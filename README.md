@@ -9,7 +9,7 @@ WP Notifications is easy, and straightforward to use.
 
 ````php
 $recipient = wp_get_current_user();
-$manager = Factory::make( 'your-notification-name' );
+$manager = Factory::make( 'your-notification' );
 $message = "Hey {first_name}, how's it going?";
 $subject = "Hey!"
 
@@ -26,10 +26,13 @@ $queue->process( $notifications, new WP_Mail() );
 
 ### Setting up template tag listeners
 ````php
-// a template tag of {first_name} will be automatically replaced with the recipient's first name when sending.
-$manager->add_listener( new Listener( 'first_name', function( WP_User $recipient ) {
-	return $recipient->first_name;
-} ) );
+add_action( 'ibd_wp_notifications_template_manager_your-notification', function( Manager $manager ) {
+    // a template tag of {first_name} will be automatically replaced 
+    // with the recipient's first name when sending.
+    $manager->add_listener( new Listener( 'first_name', function( WP_User $recipient ) {
+        return $recipient->first_name;
+    } ) );
+} );
 
 ````
 
