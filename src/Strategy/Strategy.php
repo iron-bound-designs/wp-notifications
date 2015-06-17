@@ -4,6 +4,9 @@
  *
  * @author Iron Bound Designs
  * @since  1.0
+ *
+ * @copyright   Copyright (c) 2015, Iron Bound Designs, Inc.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License v2 or later
  */
 
 namespace IronBound\WP_Notifications\Strategy;
