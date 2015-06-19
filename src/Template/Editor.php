@@ -2,8 +2,8 @@
 /**
  * Build an editor.
  *
- * @author Iron Bound Designs
- * @since  1.0
+ * @author      Iron Bound Designs
+ * @since       1.0
  *
  * @copyright   Copyright (c) 2015, Iron Bound Designs, Inc.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License v2 or later
@@ -42,8 +42,8 @@ class Editor {
 	 */
 	public function __construct( Manager $manager, array $translations ) {
 		remove_action( 'media_buttons', 'media_buttons' );
-		add_action( 'media_buttons', array( __CLASS__, 'display_template_tag_button' ), 15 );
-		add_filter( 'mce_buttons', array( __CLASS__, 'modify_mce_buttons' ) );
+		add_action( 'media_buttons', array( $this, 'display_template_tag_button' ), 15 );
+		add_filter( 'mce_buttons', array( $this, 'modify_mce_buttons' ) );
 
 		$this->manager      = $manager;
 		$this->translations = $translations;
@@ -112,11 +112,11 @@ class Editor {
 	 *
 	 * @since 1.0
 	 */
-	public static function display_template_tag_button() {
+	public function display_template_tag_button() {
 		add_thickbox();
 		$id    = 'ibd-wp-notifications-select-tag-' . self::$count;
 		$class = 'thickbox button ibd-wp-notifications-tags';
-		$title = __( "Insert Template Tag" ); // todo figure out how to do this better
+		$title = $this->translations['insertTemplateTag'];
 
 
 		echo '<a href="#TB_inline?width=150height=250&inlineId=' . $id . '" class="' . $class . '" title="' . $title . '"> ' . $title . '</a>';
@@ -131,7 +131,7 @@ class Editor {
 	 *
 	 * @return array
 	 */
-	public static function modify_mce_buttons( $buttons ) {
+	public function modify_mce_buttons( $buttons ) {
 		unset( $buttons[ array_search( 'wp_more', $buttons ) ] );
 
 		return $buttons;
@@ -144,7 +144,7 @@ class Editor {
 	 */
 	public function __destruct() {
 		add_action( 'media_buttons', 'media_buttons' );
-		remove_action( 'media_buttons', array( __CLASS__, 'display_template_tag_button' ), 15 );
-		remove_filter( 'mce_buttons', array( __CLASS__, 'modify_mce_buttons' ) );
+		remove_action( 'media_buttons', array( $this, 'display_template_tag_button' ), 15 );
+		remove_filter( 'mce_buttons', array( $this, 'modify_mce_buttons' ) );
 	}
 }
