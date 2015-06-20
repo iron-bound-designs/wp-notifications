@@ -52,6 +52,11 @@ class Notification implements \Serializable {
 	private $tags = array();
 
 	/**
+	 * @var bool
+	 */
+	private $regenerate = false;
+
+	/**
 	 * @var Manager
 	 */
 	private $manager;
@@ -94,7 +99,18 @@ class Notification implements \Serializable {
 			$rendered[ '{' . $tag . '}' ] = $value;
 		}
 
+		$this->regenerate = false;
+
 		return $rendered;
+	}
+
+	/**
+	 * Mark the notification's template tags as needing regeneration.
+	 *
+	 * @since 1.0
+	 */
+	final protected function regenerate() {
+		$this->regenerate = true;
 	}
 
 	/**
@@ -108,6 +124,8 @@ class Notification implements \Serializable {
 	 */
 	public function add_data_source( \Serializable $source ) {
 		$this->data_sources[] = $source;
+
+		$this->regenerate();
 
 		return $this;
 	}
@@ -202,6 +220,11 @@ class Notification implements \Serializable {
 	 * @return array
 	 */
 	final public function get_tags() {
+
+		if ( $this->regenerate ) {
+			$this->tags = $this->generate_rendered_tags();
+		}
+
 		return $this->tags;
 	}
 
@@ -229,25 +252,13 @@ class Notification implements \Serializable {
 	 * @return array
 	 */
 	protected function get_data_to_serialize() {
-
-		$data_sources = $this->data_sources;
-
-		// remove the WP User from the data sources array before serialization
-		foreach ( $data_sources as $key => $val ) {
-			if ( $val instanceof \WP_User ) {
-				unset( $data_sources[ $key ] );
-
-				break;
-			}
-		}
-
 		return array(
 			'recipient'    => $this->recipient->ID,
 			'message'      => $this->message,
 			'subject'      => $this->subject,
 			'strategy'     => serialize( $this->strategy ),
 			'manager'      => $this->manager->get_type(),
-			'data_sources' => serialize( $data_sources )
+			'data_sources' => serialize( $this->data_sources )
 		);
 	}
 
@@ -282,10 +293,9 @@ class Notification implements \Serializable {
 		$this->recipient = get_user_by( 'id', $data['recipient'] );
 		$this->message   = $data['message'];
 		$this->manager   = Factory::make( $data['manager'] );
-		$this->tags      = $this->generate_rendered_tags();
 		$this->strategy  = unserialize( $data['strategy'] );
 
-		$this->data_sources   = unserialize( $data['data_sources'] );
-		$this->data_sources[] = $this->recipient;
+		$this->data_sources = unserialize( $data['data_sources'] );
+		$this->tags         = $this->generate_rendered_tags();
 	}
 }
