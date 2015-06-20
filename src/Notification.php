@@ -19,7 +19,7 @@ use IronBound\WP_Notifications\Template\Manager;
  * Class Notification
  * @package IronBound\WP_Notifications
  */
-class Notification implements \Serializable {
+class Notification implements Contract {
 
 	/**
 	 * @var Strategy

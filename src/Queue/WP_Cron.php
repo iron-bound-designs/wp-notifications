@@ -2,8 +2,8 @@
 /**
  * Process a queue of notifications using WP Cron.
  *
- * @author Iron Bound Designs
- * @since  1.0
+ * @author      Iron Bound Designs
+ * @since       1.0
  *
  * @copyright   Copyright (c) 2015, Iron Bound Designs, Inc.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License v2 or later
@@ -11,7 +11,7 @@
 
 namespace IronBound\WP_Notifications\Queue;
 
-use IronBound\WP_Notifications\Notification;
+use IronBound\WP_Notifications\Contract;
 use IronBound\WP_Notifications\Strategy\Strategy;
 
 /**
@@ -47,8 +47,8 @@ class WP_Cron implements Queue {
 	 *
 	 * @since 1.0
 	 *
-	 * @param Notification[] $notifications
-	 * @param Strategy       $strategy
+	 * @param Contract[] $notifications
+	 * @param Strategy   $strategy
 	 *
 	 * @throws \Exception
 	 */
@@ -111,7 +111,7 @@ class WP_Cron implements Queue {
 		}
 
 		/**
-		 * @var Notification $notification
+		 * @var Contract $notification
 		 */
 		foreach ( $to_process as $key => $notification ) {
 

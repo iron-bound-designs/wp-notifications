@@ -8,7 +8,7 @@
 
 namespace IronBound\WP_Notifications\Queue;
 
-use IronBound\WP_Notifications\Notification;
+use IronBound\WP_Notifications\Contract;
 use IronBound\WP_Notifications\Strategy\Null;
 use IronBound\WP_Notifications\Strategy\Strategy;
 
@@ -46,14 +46,14 @@ class Mandrill implements Queue {
 	 *
 	 * @since 1.0
 	 *
-	 * @param Notification[] $notifications
-	 * @param Strategy       $strategy This will end up being unused.
+	 * @param Contract[] $notifications
+	 * @param Strategy   $strategy This will end up being unused.
 	 *
 	 * @throws \Exception|\Mandrill_Error
 	 */
 	public function process( array $notifications, Strategy $strategy ) {
 
-		/** @var Notification $one */
+		/** @var Contract $one */
 		$one = reset( $notifications );
 
 		$subject    = $this->convert_tags( $one->get_subject() );
@@ -100,7 +100,7 @@ class Mandrill implements Queue {
 	 *
 	 * @since 1.0
 	 *
-	 * @param Notification[] $notifications
+	 * @param Contract[] $notifications
 	 *
 	 * @return array[]
 	 */
@@ -132,7 +132,7 @@ class Mandrill implements Queue {
 	 *
 	 * @since 1.0
 	 *
-	 * @param Notification[] $notifications
+	 * @param Contract[] $notifications
 	 *
 	 * @return array[]
 	 */
