@@ -91,6 +91,10 @@ interface Contract extends \Serializable {
 	/**
 	 * Get the tags to be replaced.
 	 *
+	 * This is the already rendered form so an array of:
+	 *
+	 *  {first_name} => "John"
+	 *
 	 * @since 1.0
 	 *
 	 * @return array
