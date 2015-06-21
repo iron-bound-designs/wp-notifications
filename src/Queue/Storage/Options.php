@@ -40,18 +40,21 @@ class Options implements Contract {
 	 *
 	 * @param string         $queue_id
 	 * @param Notification[] $notifications
-	 * @param Strategy       $strategy
+	 * @param Strategy       $strategy If null, previously set strategy will be used.
 	 *
 	 * @return bool
 	 */
-	public function store_notifications( $queue_id, array $notifications, Strategy $strategy ) {
+	public function store_notifications( $queue_id, array $notifications, Strategy $strategy = null ) {
 
 		$all = get_option( $this->bucket, array() );
 
 		$all[ $queue_id ] = array(
-			'notifications' => $notifications,
-			'strategy'      => $strategy
+			'notifications' => $notifications
 		);
+
+		if ( isset( $strategy ) ) {
+			$all[ $queue_id ]['strategy'] = $strategy;
+		}
 
 		return update_option( $this->bucket, $all );
 	}
@@ -123,4 +126,31 @@ class Options implements Contract {
 
 		return true;
 	}
+
+	/**
+	 * Clear a single notification from storage.
+	 *
+	 * @since 1.0
+	 *
+	 * @param string       $queue_id
+	 * @param Notification $notification
+	 *
+	 * @return bool
+	 */
+	public function clear_notification( $queue_id, Notification $notification ) {
+
+		$notifications = $this->get_notifications( $queue_id );
+
+		$notification = array_search( $notification, $notifications );
+
+		if ( false === $notification ) {
+			return false;
+		}
+
+		unset( $notifications[ $notification ] );
+
+		return $this->store_notifications( $queue_id, $notifications );
+	}
+
+
 }

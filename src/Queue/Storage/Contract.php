@@ -7,6 +7,7 @@
  */
 
 namespace IronBound\WP_Notifications\Queue\Storage;
+
 use IronBound\WP_Notifications\Contract as Notification;
 use IronBound\WP_Notifications\Strategy\Strategy;
 
@@ -61,4 +62,16 @@ interface Contract {
 	 * @return bool
 	 */
 	public function clear_notifications( $queue_id );
+
+	/**
+	 * Clear a notification from storage.
+	 *
+	 * @since 1.0
+	 *
+	 * @param string       $queue_id
+	 * @param Notification $notification
+	 *
+	 * @return bool
+	 */
+	public function clear_notification( $queue_id, Notification $notification );
 }
