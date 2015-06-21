@@ -36,6 +36,8 @@ class Options implements Contract {
 	/**
 	 * Store a set of notifications.
 	 *
+	 * If notifications is empty, it will clear the set.
+	 *
 	 * @since 1.0
 	 *
 	 * @param string         $queue_id
@@ -47,6 +49,10 @@ class Options implements Contract {
 	public function store_notifications( $queue_id, array $notifications, Strategy $strategy = null ) {
 
 		$all = get_option( $this->bucket, array() );
+
+		if ( empty( $notifications ) ) {
+			return $this->clear_notifications( $queue_id );
+		}
 
 		$all[ $queue_id ] = array(
 			'notifications' => $notifications

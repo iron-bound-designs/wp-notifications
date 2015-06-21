@@ -129,10 +129,6 @@ class WP_Cron implements Queue {
 			}
 		}
 
-		if ( empty( $notifications ) ) {
-			$this->storage->clear_notifications( $hash );
-		} else {
-			$this->storage->store_notifications( $hash, $notifications, $strategy );
-		}
+		$this->storage->store_notifications( $hash, $notifications );
 	}
 }

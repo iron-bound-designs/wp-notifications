@@ -20,15 +20,17 @@ interface Contract {
 	/**
 	 * Store a set of notifications.
 	 *
+	 * If notifications is empty, it will clear the set.
+	 *
 	 * @since 1.0
 	 *
 	 * @param string         $queue_id
 	 * @param Notification[] $notifications
-	 * @param Strategy       $strategy
+	 * @param Strategy       $strategy If null, previously set strategy will be used.
 	 *
 	 * @return bool
 	 */
-	public function store_notifications( $queue_id, array $notifications, Strategy $strategy );
+	public function store_notifications( $queue_id, array $notifications, Strategy $strategy = null );
 
 	/**
 	 * Get a set of notifications.
