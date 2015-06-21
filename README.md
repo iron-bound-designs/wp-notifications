@@ -20,7 +20,7 @@ $notification->set_strategy( new WP_Mail() )->send();
 ### Sending multiple notifications
 
 ````php
-$queue = new WP_Cron( 'your-project-name' );
+$queue = new WP_Cron( new Options_Storage( 'your-project-name' ) );
 $queue->process( $notifications, new WP_Mail() );
 ````
 
