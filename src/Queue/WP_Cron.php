@@ -57,7 +57,9 @@ class WP_Cron implements Queue {
 
 		$hash = uniqid();
 
-		$this->storage->store_notifications( $hash, $notifications, $strategy );
+		if ( ! $this->storage->store_notifications( $hash, $notifications, $strategy ) ) {
+			throw new \Exception( "Unable to store notifications." );
+		}
 
 		self::cron_callback( $hash );
 	}
