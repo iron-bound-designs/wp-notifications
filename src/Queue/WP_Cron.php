@@ -12,6 +12,7 @@
 namespace IronBound\WP_Notifications\Queue;
 
 use IronBound\WP_Notifications\Contract;
+use IronBound\WP_Notifications\Queue\Storage\Contract as Storage;
 use IronBound\WP_Notifications\Strategy\Strategy;
 
 /**
@@ -23,23 +24,23 @@ class WP_Cron implements Queue {
 	const CRON_ACTION = 'ibd-wp-notifications-cron-notification';
 
 	/**
-	 * @var string
+	 * @var Storage
 	 */
-	protected $bucket;
+	protected $storage;
 
 	/**
 	 * Constructor.
 	 *
 	 * @since 1.0
 	 *
-	 * @param string $bucket
+	 * @param Storage $storage
 	 */
-	public function __construct( $bucket ) {
+	public function __construct( Storage $storage ) {
 		if ( ! has_action( self::CRON_ACTION, array( $this, 'cron_callback' ) ) ) {
 			add_action( self::CRON_ACTION, array( $this, 'cron_callback' ) );
 		}
 
-		$this->bucket = $bucket;
+		$this->storage = $storage;
 	}
 
 	/**
@@ -56,13 +57,7 @@ class WP_Cron implements Queue {
 
 		$hash = uniqid();
 
-		$queues          = get_option( $this->bucket, array() );
-		$queues[ $hash ] = array(
-			'notifications' => $notifications,
-			'strategy'      => $strategy
-		);
-
-		update_option( $this->bucket, $queues );
+		$this->storage->store_notifications( $hash, $notifications, $strategy );
 
 		self::cron_callback( $hash );
 	}
@@ -87,20 +82,13 @@ class WP_Cron implements Queue {
 	 */
 	public function cron_callback( $hash ) {
 
-		$queues = get_option( $this->bucket, array() );
+		$notifications = $this->storage->get_notifications( $hash );
 
-		if ( ! isset( $queues[ $hash ] ) ) {
+		if ( empty( $notifications ) ) {
 			return;
 		}
 
-		$queue = $queues[ $hash ];
-
-		$notifications = $queue['notifications'];
-
-		/**
-		 * @var Strategy $strategy
-		 */
-		$strategy = $queue['strategy'];
+		$strategy = $this->storage->get_notifications_strategy( $hash );
 
 		$rate = $strategy->get_suggested_rate();
 
@@ -140,14 +128,9 @@ class WP_Cron implements Queue {
 		}
 
 		if ( empty( $notifications ) ) {
-			unset( $queues[ $hash ] );
+			$this->storage->clear_notifications( $hash );
 		} else {
-			$queues[ $hash ]['notifications'] = $notifications;
-
-			// we pass along a garbage uniquid to prevent WP Cron from denying our event since it is less than 10 minutes since the last
-			wp_schedule_single_event( self::get_next_event_time(), self::CRON_ACTION, array( $hash, uniqid() ) );
+			$this->storage->store_notifications( $hash, $notifications, $strategy );
 		}
-
-		update_option( $this->bucket, $queues );
 	}
 }
