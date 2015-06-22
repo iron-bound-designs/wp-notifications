@@ -54,7 +54,7 @@ class Notification implements Contract {
 	/**
 	 * @var bool
 	 */
-	private $regenerate = false;
+	private $regenerate = true;
 
 	/**
 	 * @var Manager
@@ -76,8 +76,6 @@ class Notification implements Contract {
 		$this->message   = $message;
 		$this->manager   = $manager;
 		$this->subject   = $subject;
-
-		$this->tags = $this->generate_rendered_tags();
 	}
 
 	/**
