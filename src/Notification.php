@@ -294,6 +294,7 @@ class Notification implements Contract {
 	protected function do_unserialize( array $data ) {
 		$this->recipient = get_user_by( 'id', $data['recipient'] );
 		$this->message   = $data['message'];
+		$this->subject   = $data['subject'];
 		$this->manager   = Factory::make( $data['manager'] );
 		$this->strategy  = unserialize( $data['strategy'] );
 
