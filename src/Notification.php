@@ -117,11 +117,18 @@ class Notification implements Contract {
 	 * @since 1.0
 	 *
 	 * @param \Serializable $source
+	 * @param string        $name If passed, listeners specifying that function
+	 *                            argument name will receive this data source.
 	 *
 	 * @return self
 	 */
-	public function add_data_source( \Serializable $source ) {
-		$this->data_sources[] = $source;
+	public function add_data_source( \Serializable $source, $name = '' ) {
+
+		if ( $name ) {
+			$this->data_sources[ $name ] = $source;
+		} else {
+			$this->data_sources[] = $source;
+		}
 
 		$this->regenerate();
 

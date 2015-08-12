@@ -6,6 +6,7 @@
  * @since  1.0
  */
 namespace IronBound\WP_Notifications;
+
 use IronBound\WP_Notifications\Strategy\Strategy;
 
 
@@ -20,10 +21,12 @@ interface Contract extends \Serializable {
 	 * @since 1.0
 	 *
 	 * @param \Serializable $source
+	 * @param string        $name If passed, listeners specifying that function
+	 *                            argument name will receive this data source.
 	 *
 	 * @return self
 	 */
-	public function add_data_source( \Serializable $source );
+	public function add_data_source( \Serializable $source, $name = '' );
 
 	/**
 	 * Set the send strategy.
