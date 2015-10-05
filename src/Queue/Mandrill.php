@@ -62,13 +62,14 @@ class Mandrill implements Queue {
 		$tos        = $this->prepare_to( $notifications );
 
 		$args = array(
-			'html'       => $message,
-			'subject'    => $subject,
-			'from_name'  => get_option( 'blogname' ),
-			'from_email' => get_option( 'admin_email' ),
-			'to'         => $tos,
-			'auto_text'  => true,
-			'merge_vars' => $merge_vars
+			'html'                => $message,
+			'subject'             => $subject,
+			'from_name'           => get_option( 'blogname' ),
+			'from_email'          => get_option( 'admin_email' ),
+			'to'                  => $tos,
+			'auto_text'           => true,
+			'merge_vars'          => $merge_vars,
+			'preserve_recipients' => false
 		);
 
 		$args = wp_parse_args( $args, $this->defaults );
