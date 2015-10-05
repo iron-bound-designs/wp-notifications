@@ -52,4 +52,4 @@ Via composer...
 {todo}
 
 ## License
-GPLv2 or Later
+MIT
