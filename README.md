@@ -48,8 +48,18 @@ Queues
  - Mandrill
 
 ## Installation
-Via composer...
-{todo}
+
+First, add WP Notifications as a dependency with [Composer](http://getcomposer.org):
+
+````bash
+composer require ironbound/wp-notifications
+````
+
+Then, make sure your bootstrap file is loading the composer autoloader:
+
+```php
+require_once 'vendor/autoload.php';
+```
 
 ## License
 MIT
