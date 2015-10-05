@@ -2,11 +2,11 @@
     "name": "iron-bound-designs/wp-notifications",
     "description": "Drop in framework for sending notifications in WordPress.",
     "type": "library",
-    "license": "GPLv2 or later",
+    "license": "MIT",
     "authors": [
         {
-            "name": "Timothy Jacobs",
-            "email": "timothy@ironbounddesigns.com"
+            "name": "Iron Bound Designs",
+            "email": "info@ironbounddesigns.com"
         }
     ],
     "minimum-stability": "dev",
