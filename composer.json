@@ -1,5 +1,5 @@
 {
-    "name": "iron-bound-designs/wp-notifications",
+    "name": "ironbound/wp-notifications",
     "description": "Drop in framework for sending notifications in WordPress.",
     "type": "library",
     "license": "MIT",
