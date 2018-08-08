@@ -9,10 +9,10 @@
 namespace IronBound\WP_Notifications\Strategy;
 
 /**
- * Class Null
+ * Class Null_Mail
  * @package IronBound\WP_Notifications\Strategy
  */
-class Null implements Strategy {
+class Null_Mail implements Strategy {
 
 	/**
 	 * Send the notification.

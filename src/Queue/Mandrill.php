@@ -9,7 +9,7 @@
 namespace IronBound\WP_Notifications\Queue;
 
 use IronBound\WP_Notifications\Contract;
-use IronBound\WP_Notifications\Strategy\Null;
+use IronBound\WP_Notifications\Strategy\Null_Mail;
 use IronBound\WP_Notifications\Strategy\Strategy;
 
 /**
@@ -81,7 +81,7 @@ class Mandrill implements Queue {
 		}
 
 		foreach ( $notifications as $notification ) {
-			$notification->set_strategy( new Null() )->send();
+			$notification->set_strategy( new Null_Mail() )->send();
 		}
 	}
 
