@@ -1,21 +1,18 @@
 <?php
 /**
- * Send notifications using WP Mail.
+ * Null strategy.
  *
- * @author      Iron Bound Designs
- * @since       1.0
- *
- * @copyright   Copyright (c) 2015, Iron Bound Designs, Inc.
- * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License v2 or later
+ * @author Iron Bound Designs
+ * @since  1.0
  */
 
 namespace IronBound\WP_Notifications\Strategy;
 
 /**
- * Class WP_Mail
+ * Class Null_Mail
  * @package IronBound\WP_Notifications\Strategy
  */
-class WP_Mail implements Strategy {
+class Null_Mail implements Strategy {
 
 	/**
 	 * Send the notification.
@@ -23,8 +20,8 @@ class WP_Mail implements Strategy {
 	 * @since 1.0
 	 *
 	 * @param \WP_User $recipient
-	 * @param string   $message        May contain HTML. Template parts aren't replaced.
-	 * @param string   $subject
+	 * @param string   $message        May contain HTML. Template parts haven't been replaced.
+	 * @param string   $subject        Template tags haven't been replaced.
 	 * @param array    $template_parts Array of template parts to their values.
 	 *
 	 * @return bool
@@ -32,16 +29,7 @@ class WP_Mail implements Strategy {
 	 * @throws \Exception
 	 */
 	public function send( \WP_User $recipient, $message, $subject, array $template_parts ) {
-		$message = str_replace( array_keys( $template_parts ), array_values( $template_parts ), $message );
-		$subject = str_replace( array_keys( $template_parts ), array_values( $template_parts ), $subject );
-
-		$name        = get_option( 'blogname' );
-		$admin_email = get_option( 'admin_email' );
-
-		return wp_mail( $recipient->user_email, $subject, $message, array(
-			'Content-Type: text/html; charset=UTF-8',
-			"From: $name <$admin_email>"
-		) );
+		return true;
 	}
 
 	/**
@@ -52,7 +40,7 @@ class WP_Mail implements Strategy {
 	 * @return int
 	 */
 	public function get_suggested_rate() {
-		return 10;
+		return 1;
 	}
 
 	/**
@@ -62,7 +50,7 @@ class WP_Mail implements Strategy {
 	 * @return string the string representation of the object or null
 	 */
 	public function serialize() {
-		return serialize( array() ); // we don't have any data to save
+		return null;
 	}
 
 	/**
@@ -77,6 +65,7 @@ class WP_Mail implements Strategy {
 	 * @return void
 	 */
 	public function unserialize( $serialized ) {
-		// we don't have any data to unwrap
+		// nothing to do
 	}
+
 }
